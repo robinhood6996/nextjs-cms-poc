@@ -39,3 +39,15 @@ export const fetchPageData = async (slug: string) => {
     return null; // Return null on error
   }
 };
+// Fetch a specific page by slug
+export const fetchPageDataByLang = async (slug: string, language: string) => {
+  try {
+    const response = await axios.get(
+      `${API_BASE_URL}/${slug.toLowerCase()}/${language}.json`
+    ); // Adjust endpoint as per API
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching page data for slug: ${slug}`, error);
+    return null; // Return null on error
+  }
+};
