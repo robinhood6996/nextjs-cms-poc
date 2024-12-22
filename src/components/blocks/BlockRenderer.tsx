@@ -3,7 +3,6 @@ import { PageBlock, Module } from "../../lib/types";
 import CarouselBlock from "./CarouselBlock";
 import NewsBlock from "./NewsBlock";
 import DJBlock from "./DJBlock";
-import { useLanguage } from "@/hooks/LanguageContext";
 import ContentHTMLBlock from "./ContentHtmlBlock";
 
 interface BlockRendererProps {
@@ -12,17 +11,17 @@ interface BlockRendererProps {
 }
 
 export default function BlockRenderer({ blocks, modules }: BlockRendererProps) {
-  const { currentLanguage } = useLanguage();
+
 
   return (
     <>
       {blocks.map((block) => {
         const _module = modules.find((m) => m.ModuleID === block.ModuleID);
         const content =
-          block.Content?.find((c) => c.LangageID === currentLanguage.LangageID)
+          block.Content?.find((c) => c.LangageID === 1)
             ?.Title || "";
 
-        if (!module)
+        if (!_module)
           return <p key={block.BlockID}>Unknown module: {block.ModuleID}</p>;
 
         switch (_module?.ModuleName) {

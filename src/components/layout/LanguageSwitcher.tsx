@@ -1,15 +1,21 @@
+"use client"
+import { fetchAllPages } from "@/api/api";
 import { useLanguage } from "@/hooks/LanguageContext";
 import { Language } from "@/lib/types";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-interface LanguageSwitcherProps {
-  languages: Language[];
-}
-
-export default function LanguageSwitcher({ languages }: LanguageSwitcherProps) {
+export default function LanguageSwitcher() {
   const { currentLanguage, setLanguage } = useLanguage();
+  const getLanguages = async () => {
+    const response = await fetchAllPages();
+    return response.data.Languages;
+  }
 
+  const [languages, setLanguages] = useState<Language[]>([]);
+  useEffect(() => {
+    getLanguages().then((languages) => setLanguages(languages));
+  }, []);
   return (
     <div className="language-switcher">
       {languages.map((language) => (
