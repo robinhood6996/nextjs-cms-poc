@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
-  basePath: "",
+  basePath: "my-headless-cms",
 };
 
 export default nextConfig;
