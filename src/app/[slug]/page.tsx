@@ -1,7 +1,7 @@
 import { fetchAllPages, fetchPageDataByLang } from "@/api/api";
 import BlockRenderer from "@/components/blocks/BlockRenderer";
 // import BlockRenderer from "@/components/blocks/BlockRenderer";
-import { APIResponse, Page as PageType } from "@/lib/types";
+import { APIResponse, Module, Page as PageType } from "@/lib/types";
 import Head from "next/head";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -21,7 +21,12 @@ const Page = async (props: PageProps) => {
   const query = await props.searchParams;
   console.log("props", props);
   const { slug } = params;
-
+  const getModule = async () => {
+    const response = await fetchAllPages();
+    // console.log("response", response.data);
+    const page = response.data.Modules;
+    return page;
+  };
   const getPage = async () => {
     if (query && query.lang) {
       const response = await fetchPageDataByLang(slug, query.lang);
@@ -36,7 +41,8 @@ const Page = async (props: PageProps) => {
     }
   };
   const page: APIResponse | PageType = await getPage();
-  console.log("page", page);
+  const _modules: Module[] = await getModule();
+  console.log("_modules", query.lang);
   const pageContent = !query.lang
     ? (page as APIResponse).Pages.find(
         (p: PageType) => p.Name.toLowerCase() === slug.toLowerCase()
@@ -55,7 +61,19 @@ const Page = async (props: PageProps) => {
       <br />
       <Link href="/news?lang=gb">News EN</Link>
       <h1>{(pageContent as PageType).Name}</h1>
-      {/* <BlockRenderer blocks={pageContent.Blocks} modules={page.Modules} /> */}
+      {query.lang ? (
+        <BlockRenderer
+          blocks={(pageContent as PageType)?.Blocks}
+          modules={_modules}
+          languageId={query.lang === "gb" ? 2 : 1}
+        />
+      ) : (
+        <BlockRenderer
+          blocks={(pageContent as PageType)?.Blocks}
+          modules={_modules}
+          languageId={1}
+        />
+      )}
     </>
   );
 };

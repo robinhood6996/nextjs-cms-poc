@@ -8,19 +8,21 @@ import ContentHTMLBlock from "./ContentHtmlBlock";
 interface BlockRendererProps {
   blocks: PageBlock[];
   modules: Module[];
+  languageId: number;
 }
 
-export default function BlockRenderer({ blocks, modules }: BlockRendererProps) {
-
-
+export default function BlockRenderer({
+  blocks,
+  modules,
+  languageId,
+}: BlockRendererProps) {
   return (
     <>
       {blocks.map((block) => {
         const _module = modules.find((m) => m.ModuleID === block.ModuleID);
         const content =
-          block.Content?.find((c) => c.LangageID === 1)
-            ?.Title || "";
-
+          block.Content?.find((c) => c.LangageID === languageId)?.Title || "";
+        console.log("_module2", blocks);
         if (!_module)
           return <p key={block.BlockID}>Unknown module: {block.ModuleID}</p>;
 
