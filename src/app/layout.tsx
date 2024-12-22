@@ -1,5 +1,5 @@
 import { Language } from "@/lib/types";
-import LanguageSwitcher from "@/components/layout/LanguageSwitcher";
+// import LanguageSwitcher from "@/components/layout/LanguageSwitcher";
 import { LanguageProvider } from "@/hooks/LanguageContext";
 
 interface LayoutProps {
