@@ -1,12 +1,13 @@
 "use client"
 import { fetchAllPages } from "@/api/api";
-import { useLanguage } from "@/hooks/LanguageContext";
 import { Language } from "@/lib/types";
 import Image from "next/image";
+import { usePathname,useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 export default function LanguageSwitcher() {
-  const { currentLanguage, setLanguage } = useLanguage();
+  const router = useRouter();
+  const pathname = usePathname();
   const getLanguages = async () => {
     const response = await fetchAllPages();
     return response.data.Languages;
@@ -16,15 +17,24 @@ export default function LanguageSwitcher() {
   useEffect(() => {
     getLanguages().then((languages) => setLanguages(languages));
   }, []);
+  const switchLanguage = (language: Language) => {
+    const searchParams = new URLSearchParams(window.location.search);
+    searchParams.set("lang", language.LangCode);
+  
+    const baseURL = window.location.origin;
+  
+    router.push(`${baseURL}${pathname}?${searchParams.toString()}`);
+  };
+  
   return (
     <div className="language-switcher">
       {languages.map((language) => (
         <button
           key={language.LangageID}
-          className={
-            currentLanguage.LangageID === language.LangageID ? "active" : ""
-          }
-          onClick={() => setLanguage(language)}
+          // className={
+          //   currentLanguage.LangageID === language.LangageID ? "active" : ""
+          // }
+          onClick={() => switchLanguage(language)}
         >
           <Image
             src={language.Flag}
@@ -32,7 +42,7 @@ export default function LanguageSwitcher() {
             width={20}
             height={15}
           />
-          {language.Name}
+          {/* {language.Name} */}
         </button>
       ))}
     </div>
